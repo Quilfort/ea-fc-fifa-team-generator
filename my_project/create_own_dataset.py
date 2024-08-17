@@ -11,7 +11,8 @@ import pandas as pd
 def create_male_dataset():
     """
     Creates a new dataset with selected columns from the original dataset.
-    The new dataset includes only 'Name', 'Nation', 'Club', 'Position', 'Age', and 'Overall' columns.
+    The new dataset includes only:
+        'Name', 'Nation', 'Club', 'Position', 'Age', and 'Overall'.
     The new dataset is saved in the edited directory. If the file already exists, it is overwritten.
     """
     print_banner_dataset()

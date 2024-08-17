@@ -37,33 +37,42 @@ The edited dataset will be created in `create_own_dataset`. The basic dataset wi
 
 At the moment, the analytics script is just for the fun. It will display the distribution of the male players in the dataset.
 
-## Virtual Environment.
+### Linting
+```sh
+black .
+```
 
-#### Activate (Mac)
+```sh
+pylint my_project/
+```
+
+### Virtual Environment.
+
+##### Activate (Mac)
 
 ```sh
 source venv/bin/activate
 ```
 
-#### Activate (Mac)
+##### Activate (Mac)
 
 ```sh
 venv\Scripts\activate
 ```
 
-#### Install Packages
+##### Install Packages
 
 ```sh
 pip [Command]
 ```
 
-### Generate or Update Requirements
+#### Generate or Update Requirements
 
 ```sh
 pip freeze > requirements.txt
 ```
 
-#### Deactivate (Mac)
+##### Deactivate (Mac)
 
 ```sh
 deactivate
