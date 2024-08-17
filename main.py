@@ -20,7 +20,7 @@ def main():
 
     # Flags to control which parts of the tool are run
     make_male_dataset = False
-    show_analytics = False
+    show_analytics = True
     start_draft = True
 
     # Create the dataset if the flag is set

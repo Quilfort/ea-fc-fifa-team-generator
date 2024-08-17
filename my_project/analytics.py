@@ -4,9 +4,9 @@ It provides statistics such as total number of players, distribution of overall 
 and distribution of player positions.
 """
 
-import os
 from dotenv import load_dotenv
 import pandas as pd
+from .create_super_league import get_file_path
 
 
 def analyze_male_players():
@@ -25,20 +25,8 @@ def analyze_male_players():
     # Load the environment variables
     load_dotenv()
 
-    # Check if the edited dataset exists
-    edited_dataset_path = os.getenv("EDITED_DATASET_PATH")
-    edited_male_file_path = os.path.join(edited_dataset_path, "male_players_edited.csv")
-
-    # Check if the edited file exists
-    if os.path.exists(edited_male_file_path):
-        file_path = edited_male_file_path
-        print("Using the edited dataset.\n")
-    else:
-        original_dataset_path = os.getenv("ORIGINAL_DATASET_PATH")
-        file_path = os.path.join(original_dataset_path, "male_players.csv")
-        print("Edited dataset not found. Using the original dataset.\n")
-
     # Load the dataset
+    file_path = get_file_path()
     datafile = pd.read_csv(file_path)
 
     # Perform analysis
