@@ -1,5 +1,5 @@
 import os
-from dotenv import load_dotenv, dotenv_values
+from dotenv import load_dotenv
 import pandas as pd
 
 
@@ -14,10 +14,7 @@ def create_male_dataset():
     load_dotenv()
 
     # Load the base directory from the environment variable
-    original_dataset_path = os.getenv('ORIGINAL_DATASET_PATH')
-     
-    
-    print(f"Original Dataset Path: {original_dataset_path}\n")
+    original_dataset_path = os.getenv('ORIGINAL_DATASET_PATH') 
 
     # Concatenate the base directory with the filename
     male_file_path = os.path.join(original_dataset_path, 'male_players.csv')
@@ -48,9 +45,7 @@ def create_male_dataset():
     df_filtered.to_csv(new_file_path, index=False)
 
     print(f"Processed file saved as: {new_file_path}\n")
-
-     # Save the filtered DataFrame to a new CSV file
-    df_filtered.to_csv(new_file_path, index=False)
+    
 
 if __name__ == "__main__":
     create_male_dataset()
