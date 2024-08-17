@@ -1,24 +1,41 @@
+"""
+This module performs analysis on a dataset of male players.
+It provides statistics such as total number of players, distribution of overall ratings,
+and distribution of player positions.
+"""
+
 import os
 from dotenv import load_dotenv
 import pandas as pd
 
-def analyze_male_players():
 
+def analyze_male_players():
+    """
+    Analyzes the dataset of male players to provide various statistics.
+    It checks for the presence of an edited dataset first;
+    if not found, it falls back to the original dataset.
+    The function prints:
+    - Total number of male players
+    - Distribution of players by overall rating (90+, 80-89, 70-79)
+    - Distribution of players by position (Goalkeepers, Defenders, Midfielders, Strikers)
+    """
+    # Print Banner
     print_banner_analytics()
+
     # Load the environment variables
     load_dotenv()
 
     # Check if the edited dataset exists
-    edited_dataset_path = os.getenv('EDITED_DATASET_PATH')
-    edited_male_file_path = os.path.join(edited_dataset_path, 'male_players_edited.csv')
+    edited_dataset_path = os.getenv("EDITED_DATASET_PATH")
+    edited_male_file_path = os.path.join(edited_dataset_path, "male_players_edited.csv")
 
     # Check if the edited file exists
     if os.path.exists(edited_male_file_path):
         file_path = edited_male_file_path
         print("Using the edited dataset.\n")
     else:
-        original_dataset_path = os.getenv('ORIGINAL_DATASET_PATH')
-        file_path = os.path.join(original_dataset_path, 'male_players.csv')
+        original_dataset_path = os.getenv("ORIGINAL_DATASET_PATH")
+        file_path = os.path.join(original_dataset_path, "male_players.csv")
         print("Edited dataset not found. Using the original dataset.\n")
 
     # Load the dataset
@@ -26,10 +43,13 @@ def analyze_male_players():
 
     # Perform analysis
     total_male_players = len(datafile)
-    players_with_90_overall = len(datafile[datafile['Overall'] >= 90])
-    players_with_80_overall = len(datafile[(datafile['Overall'] >= 80) & (datafile['Overall'] < 90)])
-    players_with_70_overall = len(datafile[(datafile['Overall'] >= 70) & (datafile['Overall'] < 80)])
-
+    players_with_90_overall = len(datafile[datafile["Overall"] >= 90])
+    players_with_80_overall = len(
+        datafile[(datafile["Overall"] >= 80) & (datafile["Overall"] < 90)]
+    )
+    players_with_70_overall = len(
+        datafile[(datafile["Overall"] >= 70) & (datafile["Overall"] < 80)]
+    )
 
     # Define position categories
     # Goalkeepers: GK
@@ -37,15 +57,14 @@ def analyze_male_players():
     # Midfielders: CM, CDM, CAM, RM, LM
     # Strikers: ST, CF, RW, LW
 
-
-    goalkeepers_count = len(datafile[datafile['Position'] == 'GK'])
-    defenders_count = len(datafile[datafile['Position'].isin(['CB', 'LB', 'RB', 'LWB', 'RWB'])])
-    midfielders_count = len(datafile[datafile['Position'].isin(['CM', 'CDM', 'CAM', 'RM', 'LM'])])
-    strikers_count = len(datafile[datafile['Position'].isin(['ST', 'CF', 'RW', 'LW'])])
-
-    # Get Unique Position
-    # unique_positions = datafile['Position'].unique()
-    # print(f"Unique positions: {', '.join(unique_positions)}")
+    goalkeepers_count = len(datafile[datafile["Position"] == "GK"])
+    defenders_count = len(
+        datafile[datafile["Position"].isin(["CB", "LB", "RB", "LWB", "RWB"])]
+    )
+    midfielders_count = len(
+        datafile[datafile["Position"].isin(["CM", "CDM", "CAM", "RM", "LM"])]
+    )
+    strikers_count = len(datafile[datafile["Position"].isin(["ST", "CF", "RW", "LW"])])
 
     # Print results
     print(f"Total number of male players: {total_male_players}\n")
@@ -61,12 +80,17 @@ def analyze_male_players():
     print(f"Midfielders: {midfielders_count}")
     print(f"Strikers: {strikers_count}")
 
+
 def print_banner_analytics():
+    """
+    Prints a banner for the analytics section of the script.
+    """
     width = 40
 
     print("=" * width)
-    print("Show analyse of dataset".center(width))
+    print("Show analysis of dataset".center(width))
     print("=" * width)
+
 
 if __name__ == "__main__":
     analyze_male_players()

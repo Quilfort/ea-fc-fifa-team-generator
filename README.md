@@ -1,8 +1,13 @@
 # ea-fc-fifa-team-generator
 
+## About
+
+Project is based for the English Leagues
+
 ## Install Project
 
 ```sh
+git clone git@github.com:Quilfort/ea-fc-fifa-team-generator.git # if using SSH
 python -m venv venv
 source venv/bin/activate  # or venv\Scripts\activate on Windows
 pip install -r requirements.txt
@@ -12,7 +17,7 @@ pip install -r requirements.txt
 
 ### Original Dataset
 
-The dataset for EA FC 24 is created by Davis Nyagami([@nyagami](https://www.kaggle.com/nyagami)).
+The dataset for EA FC24 is created by Davis Nyagami ([@nyagami](https://www.kaggle.com/nyagami)).
 You can download the dataset from Kaggle by clicking on [this link](https://www.kaggle.com/datasets/nyagami/fc-24-players-database-and-stats-from-easports)
 
 ### Edited Dataset
