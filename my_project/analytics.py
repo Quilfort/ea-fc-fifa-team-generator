@@ -4,6 +4,7 @@ import pandas as pd
 
 def analyze_male_players():
 
+    print_banner_analytics()
     # Load the environment variables
     load_dotenv()
 
@@ -59,6 +60,13 @@ def analyze_male_players():
     print(f"Defenders: {defenders_count}")
     print(f"Midfielders: {midfielders_count}")
     print(f"Strikers: {strikers_count}")
+
+def print_banner_analytics():
+    width = 40
+
+    print("=" * width)
+    print("Show analyse of dataset".center(width))
+    print("=" * width)
 
 if __name__ == "__main__":
     analyze_male_players()

@@ -10,6 +10,7 @@ import pandas as pd
 
 def create_male_dataset():
 
+    print_banner_dataset()
     # Try manually loading
     load_dotenv()
 
@@ -45,7 +46,15 @@ def create_male_dataset():
     df_filtered.to_csv(new_file_path, index=False)
 
     print(f"Processed file saved as: {new_file_path}\n")
-    
+
+
+
+def print_banner_dataset():
+    width = 40
+
+    print("=" * width)
+    print("Creating your dataset".center(width))
+    print("=" * width)
 
 if __name__ == "__main__":
     create_male_dataset()
