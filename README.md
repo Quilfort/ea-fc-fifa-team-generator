@@ -13,6 +13,14 @@ source venv/bin/activate  # or venv\Scripts\activate on Windows
 pip install -r requirements.txt
 ```
 
+#### or
+
+For Mac
+
+```sh
+make setup
+```
+
 ## Dataset
 
 ### Original Dataset
@@ -38,6 +46,7 @@ The edited dataset will be created in `create_own_dataset`. The basic dataset wi
 At the moment, the analytics script is just for the fun. It will display the distribution of the male players in the dataset.
 
 ### Linting
+
 ```sh
 black .
 ```
