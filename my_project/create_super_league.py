@@ -39,11 +39,41 @@ def create_player_draft():
     """
     Create a draft of players.
     """
+    # Load the dataset
     datafile = pd.read_csv(get_file_path())
+
+    # Create Empty CSV file
+    create_csv_file()
 
     # Filter for goalkeepers (GK)
     gk_data = datafile[datafile["Position"] == "GK"]
     draft_goalkeeper(gk_data, criteria)
+
+
+def create_csv_file():
+    """
+    Create an empty CSV file with the specified number of rows.
+    """
+    # Total number of rows in the draft
+    total_rows = (
+        criteria["premier_league"] + criteria["championship"] + criteria["league_one"]
+    )
+
+    # Create an empty DataFrame with the specified number of rows and correct dtypes
+    draft_data = pd.DataFrame(
+        {
+            "Name": [None] * total_rows,
+            "GK": pd.Series([None] * total_rows, dtype="object"),
+        }
+    )
+
+    # Get path from environment variable
+    leagues_path = os.getenv("LEAGUES_PATH")
+    output_file_path = os.path.join(leagues_path, "super_draft.csv")
+
+    # Save the empty DataFrame to CSV
+    draft_data.to_csv(output_file_path, index=False)
+    print(f"Empty draft CSV file created at: {output_file_path}\n")
 
 
 def set_criteria():
