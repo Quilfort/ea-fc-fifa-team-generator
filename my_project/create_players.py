@@ -11,7 +11,7 @@ def draft_goalkeeper(gk_data, criteria):
     """
     Draft goalkeepers based on the top ratings and save to a CSV file.
     """
-    number_of_top_gk = 30
+    number_of_top_gk = criteria["premier_league"] + 10
 
     # Sort by Overall rating in descending order
     gk_sorted = gk_data.sort_values(by="Overall", ascending=False)

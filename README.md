@@ -63,7 +63,7 @@ pylint my_project/
 source venv/bin/activate
 ```
 
-##### Activate (Mac)
+##### Activate (Windows)
 
 ```sh
 venv\Scripts\activate

@@ -54,16 +54,24 @@ def create_csv_file():
     """
     Create an empty CSV file with the specified number of rows.
     """
-    # Total number of rows in the draft
-    total_rows = (
-        criteria["premier_league"] + criteria["championship"] + criteria["league_one"]
-    )
+    # Calculate the total number of rows
+    total_premier = criteria["premier_league"]
+    total_championship = criteria["championship"]
+    total_league_one = criteria["league_one"]
+
+    # Create row names
+    top_names = [f"Top {i+1}" for i in range(total_premier)]
+    middle_names = [f"Middle {i+1}" for i in range(total_championship)]
+    bottom_names = [f"Bottom {i+1}" for i in range(total_league_one)]
+
+    # Combine all row names
+    all_names = top_names + middle_names + bottom_names
 
     # Create an empty DataFrame with the specified number of rows and correct dtypes
     draft_data = pd.DataFrame(
         {
-            "Name": [None] * total_rows,
-            "GK": pd.Series([None] * total_rows, dtype="object"),
+            "Name": all_names,
+            "GK": pd.Series([None] * len(all_names), dtype="object"),
         }
     )
 
