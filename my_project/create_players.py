@@ -26,7 +26,7 @@ def draft_player_position(player_pos_data, criteria, position_column):
 
     # Select other player_positions
     number_of_other_player_pos = (
-        criteria["middle_league"] + criteria["bottem_league"]
+        criteria["middle_league"] + criteria["bottom_league"]
     ) - extra_number
     other_player_pos = player_pos_sorted.iloc[
         number_of_top_player_pos : number_of_top_player_pos + number_of_other_player_pos
@@ -92,7 +92,7 @@ def draft_middle_low_keepers(other_player_pos, criteria, extra_number, position_
     """
 
     # Calculate total player_positions required for middle and bottom leagues
-    total_needed_player_pos = criteria["middle_league"] + criteria["bottem_league"]
+    total_needed_player_pos = criteria["middle_league"] + criteria["bottom_league"]
 
     # Sort by Overall rating in descending order
     other_player_pos_sorted = other_player_pos.sort_values(
@@ -131,11 +131,11 @@ def draft_middle_low_keepers(other_player_pos, criteria, extra_number, position_
 
     # Fill the bottom league slots
     bottom_start = middle_end
-    bottom_end = bottom_start + criteria["bottem_league"]
+    bottom_end = bottom_start + criteria["bottom_league"]
 
     if len(draft_data) > bottom_start:
         # Remaining keepers for bottom league, including extra
-        remaining_needed_for_bottom = criteria["bottem_league"]
+        remaining_needed_for_bottom = criteria["bottom_league"]
         bottom_player_pos = needed_player_pos.iloc[
             len(middle_player_pos) : len(middle_player_pos)
             + remaining_needed_for_bottom

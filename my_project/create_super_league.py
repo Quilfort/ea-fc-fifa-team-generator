@@ -13,7 +13,7 @@ criteria = {
     "leagues": None,
     "premier_league": None,
     "middle_league": None,
-    "bottem_league": None,
+    "bottom_league": None,
 }
 
 
@@ -57,7 +57,7 @@ def create_csv_file():
     # Calculate the total number of rows
     total_premier = criteria["premier_league"]
     total_championship = criteria["middle_league"]
-    total_league_one = criteria["bottem_league"]
+    total_league_one = criteria["bottom_league"]
 
     # Create row names
     top_names = [f"Top {i+1}" for i in range(total_premier)]
@@ -93,7 +93,7 @@ def set_criteria():
     criteria["leagues"] = 3
     criteria["premier_league"] = 20
     criteria["middle_league"] = 20
-    criteria["bottem_league"] = 24
+    criteria["bottom_league"] = 24
 
 
 def get_file_path():
