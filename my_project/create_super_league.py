@@ -48,6 +48,12 @@ def create_player_draft():
     # Filter for goalkeepers (GK)
     gk_data = datafile[datafile["Position"] == "GK"]
     draft_player_position(gk_data, criteria, "GK")
+     # Filter for goalkeepers (GK)
+    cb_data = datafile[datafile["Position"] == "CB"]
+    draft_player_position(cb_data, criteria, "CB")
+    #  # Filter for goalkeepers (GK)
+    am_data = datafile[datafile["Position"] == "CAM"]
+    draft_player_position(am_data, criteria, "CAM")
 
 
 def create_csv_file():
@@ -72,6 +78,9 @@ def create_csv_file():
         {
             "Name": all_names,
             "GK": pd.Series([None] * len(all_names), dtype="object"),
+            "CB": pd.Series([None] * len(all_names), dtype="object"),
+            "CAM": pd.Series([None] * len(all_names), dtype="object"),
+            "ST": pd.Series([None] * len(all_names), dtype="object"),
         }
     )
 
