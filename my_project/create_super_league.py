@@ -6,7 +6,7 @@ It includes functions to set criteria, create player drafts, and handle file pat
 import os
 from dotenv import load_dotenv
 import pandas as pd
-from .create_players import draft_goalkeeper
+from .create_players import draft_player_position
 
 # Configuration dictionary for criteria
 criteria = {
@@ -47,7 +47,7 @@ def create_player_draft():
 
     # Filter for goalkeepers (GK)
     gk_data = datafile[datafile["Position"] == "GK"]
-    draft_goalkeeper(gk_data, criteria)
+    draft_player_position(gk_data, criteria)
 
 
 def create_csv_file():
