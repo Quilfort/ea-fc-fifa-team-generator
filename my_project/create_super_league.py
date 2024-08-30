@@ -42,26 +42,13 @@ def create_player_draft():
     # Load the dataset
     datafile = pd.read_csv(get_file_path())
 
-    # Create Empty CSV file
-    create_csv_file(datafile)
+    # Create Empty CSV file and get unique positions
+    unique_positions = create_csv_file(datafile)
 
-    # Filter for goalkeepers (GK)
-    gk_data = datafile[datafile["Position"] == "GK"]
-    draft_player_position(gk_data, criteria, "GK")
-    # Filter for goalkeepers (GK)
-    cb_data = datafile[datafile["Position"] == "CB"]
-    draft_player_position(cb_data, criteria, "CB")
-    #  # Filter for goalkeepers (GK)
-    am_data = datafile[datafile["Position"] == "CAM"]
-    draft_player_position(am_data, criteria, "CAM")
-    #  # Filter for goalkeepers (GK)
-    # st_data = datafile[datafile["Position"] == "ST"]
-    # draft_player_position(st_data, criteria, "ST")
-
-
-import os
-import pandas as pd
-from dotenv import load_dotenv
+    # Filter data by position and update the CSV
+    for position in unique_positions:
+        position_data = datafile[datafile["Position"] == position]
+        draft_player_position(position_data, criteria, position)
 
 
 def create_csv_file(datafile):
@@ -104,6 +91,7 @@ def create_csv_file(datafile):
     # Save the empty DataFrame to CSV
     draft_data.to_csv(output_file_path, index=False)
     print(f"Empty draft CSV file created at: {output_file_path}\n")
+    return unique_positions
 
 
 def set_criteria():
