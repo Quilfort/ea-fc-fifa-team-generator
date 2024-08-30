@@ -47,7 +47,7 @@ def create_player_draft():
 
     # Filter for goalkeepers (GK)
     gk_data = datafile[datafile["Position"] == "GK"]
-    draft_player_position(gk_data, criteria)
+    draft_player_position(gk_data, criteria, "GK")
 
 
 def create_csv_file():

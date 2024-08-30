@@ -8,7 +8,7 @@ import pandas as pd
 import numpy as np
 
 
-def draft_player_position(player_pos_data, criteria):
+def draft_player_position(player_pos_data, criteria, position_column):
     """
     Draft player_positions based on the top ratings and save to a CSV file.
     """
@@ -52,12 +52,12 @@ def draft_player_position(player_pos_data, criteria):
     output_file_path = os.path.join(leagues_path, "super_draft.csv")
 
     # Load the existing draft data, ensure GK column is treated as object
-    draft_data = pd.read_csv(output_file_path, dtype={"GK": "object"})
+    draft_data = pd.read_csv(output_file_path, dtype={position_column: "object"})
 
     # Update the GK column for the premier league range
-    draft_data.iloc[: criteria["premier_league"], draft_data.columns.get_loc("GK")] = (
-        premier_player_pos_str.values
-    )
+    draft_data.iloc[
+        : criteria["premier_league"], draft_data.columns.get_loc(position_column)
+    ] = premier_player_pos_str.values
 
     # Randomly distribute remaining player_positions in the Middle Teams section
     if not remaining_player_pos.empty:
@@ -75,17 +75,18 @@ def draft_player_position(player_pos_data, criteria):
                 lambda row: ", ".join(map(str, row)), axis=1
             )
             draft_data.iloc[
-                middle_player_pos_indices, draft_data.columns.get_loc("GK")
+                middle_player_pos_indices, draft_data.columns.get_loc(position_column)
             ] = middle_player_pos_str.values
 
     # Save the updated DataFrame back to CSV
     draft_data.to_csv(output_file_path, index=False)
 
-    draft_middle_low_keepers(other_player_pos, criteria, extra_number)
+    # Call draft_middle_low_keepers with the position_column argument
+    draft_middle_low_keepers(other_player_pos, criteria, extra_number, position_column)
     print(f"Super draft CSV file updated at: {output_file_path}\n")
 
 
-def draft_middle_low_keepers(other_player_pos, criteria, extra_number):
+def draft_middle_low_keepers(other_player_pos, criteria, extra_number, position_column):
     """
     Draft middle and bottom league player_positions based on their ratings and fill all remaining slots in the CSV file.
     """
@@ -108,7 +109,7 @@ def draft_middle_low_keepers(other_player_pos, criteria, extra_number):
     output_file_path = os.path.join(leagues_path, "super_draft.csv")
 
     # Load the existing draft data
-    draft_data = pd.read_csv(output_file_path, dtype={"GK": "object"})
+    draft_data = pd.read_csv(output_file_path, dtype={position_column: "object"})
 
     # Fill the middle league slots
     middle_start = criteria["premier_league"]
@@ -124,9 +125,9 @@ def draft_middle_low_keepers(other_player_pos, criteria, extra_number):
             size=len(middle_player_pos),
             replace=False,
         )
-        draft_data.iloc[middle_player_pos_indices, draft_data.columns.get_loc("GK")] = (
-            middle_player_pos_str.values
-        )
+        draft_data.iloc[
+            middle_player_pos_indices, draft_data.columns.get_loc(position_column)
+        ] = middle_player_pos_str.values
 
     # Fill the bottom league slots
     bottom_start = middle_end
@@ -162,9 +163,9 @@ def draft_middle_low_keepers(other_player_pos, criteria, extra_number):
             size=len(bottom_player_pos_str),
             replace=False,
         )
-        draft_data.iloc[bottom_player_pos_indices, draft_data.columns.get_loc("GK")] = (
-            bottom_player_pos_str.values
-        )
+        draft_data.iloc[
+            bottom_player_pos_indices, draft_data.columns.get_loc(position_column)
+        ] = bottom_player_pos_str.values
 
     # Save the updated DataFrame back to CSV
     draft_data.to_csv(output_file_path, index=False)
