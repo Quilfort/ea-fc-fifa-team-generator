@@ -24,6 +24,9 @@ def draft_player_position(player_pos_data, criteria, position_column):
     # Select the top player_positions
     top_player_pos = player_pos_sorted.head(number_of_top_player_pos)
 
+    # Shuffle the top player_positions
+    top_player_pos = top_player_pos.sample(frac=1).reset_index(drop=True)
+
     # Select other player_positions
     number_of_other_player_pos = (
         criteria["middle_league"] + criteria["bottom_league"]
@@ -51,10 +54,10 @@ def draft_player_position(player_pos_data, criteria, position_column):
     leagues_path = os.getenv("LEAGUES_PATH")
     output_file_path = os.path.join(leagues_path, "super_draft.csv")
 
-    # Load the existing draft data, ensure GK column is treated as object
+    # Load the existing draft data, ensure position_column is treated as object
     draft_data = pd.read_csv(output_file_path, dtype={position_column: "object"})
 
-    # Update the GK column for the premier league range
+    # Update the position_column for the premier league range
     draft_data.iloc[
         : criteria["premier_league"], draft_data.columns.get_loc(position_column)
     ] = premier_player_pos_str.values
@@ -84,6 +87,97 @@ def draft_player_position(player_pos_data, criteria, position_column):
     # Call draft_middle_low_keepers with the position_column argument
     draft_middle_low_keepers(other_player_pos, criteria, extra_number, position_column)
     print(f"Super draft CSV file updated at: {output_file_path}\n")
+
+
+def draft_middle_low_keepers(other_player_pos, criteria, extra_number, position_column):
+    """
+    Draft middle and bottom league player_positions based on their ratings and fill all remaining slots in the CSV file.
+    """
+
+    # Calculate total player_positions required for middle and bottom leagues
+    total_needed_player_pos = criteria["middle_league"] + criteria["bottom_league"]
+
+    # Sort by Overall rating in descending order
+    other_player_pos_sorted = other_player_pos.sort_values(
+        by="Overall", ascending=False
+    )
+
+    # Select the required number of player_positions plus extra
+    needed_player_pos = other_player_pos_sorted.head(
+        total_needed_player_pos + extra_number
+    )
+
+    # Shuffle the needed player_positions
+    needed_player_pos = needed_player_pos.sample(frac=1).reset_index(drop=True)
+
+    # Path for the output CSV file
+    leagues_path = os.getenv("LEAGUES_PATH")
+    output_file_path = os.path.join(leagues_path, "super_draft.csv")
+
+    # Load the existing draft data
+    draft_data = pd.read_csv(output_file_path, dtype={position_column: "object"})
+
+    # Fill the middle league slots
+    middle_start = criteria["premier_league"]
+    middle_end = middle_start + criteria["middle_league"]
+
+    if len(draft_data) > middle_start:
+        middle_player_pos = needed_player_pos.head(criteria["middle_league"])
+        middle_player_pos_str = middle_player_pos.apply(
+            lambda row: ", ".join(map(str, row)), axis=1
+        )
+        middle_player_pos_indices = np.random.choice(
+            range(middle_start, min(middle_end, len(draft_data))),
+            size=len(middle_player_pos),
+            replace=False,
+        )
+        draft_data.iloc[
+            middle_player_pos_indices, draft_data.columns.get_loc(position_column)
+        ] = middle_player_pos_str.values
+
+    # Fill the bottom league slots
+    bottom_start = middle_end
+    bottom_end = bottom_start + criteria["bottom_league"]
+
+    if len(draft_data) > bottom_start:
+        # Remaining keepers for bottom league, including extra
+        remaining_needed_for_bottom = criteria["bottom_league"]
+        bottom_player_pos = needed_player_pos.iloc[
+            len(middle_player_pos) : len(middle_player_pos)
+            + remaining_needed_for_bottom
+        ]
+        bottom_player_pos_str = bottom_player_pos.apply(
+            lambda row: ", ".join(map(str, row)), axis=1
+        )
+
+        # Check if more keepers are needed than currently selected for bottom
+        if len(bottom_player_pos) < remaining_needed_for_bottom:
+            additional_needed = remaining_needed_for_bottom - len(bottom_player_pos)
+            additional_player_pos = needed_player_pos.iloc[
+                -additional_needed:
+            ]  # Select from the extra keepers
+            additional_player_pos_str = additional_player_pos.apply(
+                lambda row: ", ".join(map(str, row)), axis=1
+            )
+            # Combine the current and additional player_positions
+            bottom_player_pos_str = pd.concat(
+                [bottom_player_pos_str, additional_player_pos_str]
+            )
+
+        bottom_player_pos_indices = np.random.choice(
+            range(bottom_start, min(bottom_end, len(draft_data))),
+            size=len(bottom_player_pos_str),
+            replace=False,
+        )
+        draft_data.iloc[
+            bottom_player_pos_indices, draft_data.columns.get_loc(position_column)
+        ] = bottom_player_pos_str.values
+
+    # Save the updated DataFrame back to CSV
+    draft_data.to_csv(output_file_path, index=False)
+    print(
+        f"Super draft CSV file updated for middle and bottom leagues at: {output_file_path}\n"
+    )
 
 
 def draft_middle_low_keepers(other_player_pos, criteria, extra_number, position_column):
