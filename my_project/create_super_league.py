@@ -43,7 +43,7 @@ def create_player_draft():
     datafile = pd.read_csv(get_file_path())
 
     # Create Empty CSV file
-    create_csv_file()
+    create_csv_file(datafile)
 
     # Filter for goalkeepers (GK)
     gk_data = datafile[datafile["Position"] == "GK"]
@@ -54,11 +54,19 @@ def create_player_draft():
     #  # Filter for goalkeepers (GK)
     am_data = datafile[datafile["Position"] == "CAM"]
     draft_player_position(am_data, criteria, "CAM")
+    #  # Filter for goalkeepers (GK)
+    # st_data = datafile[datafile["Position"] == "ST"]
+    # draft_player_position(st_data, criteria, "ST")
 
 
-def create_csv_file():
+import os
+import pandas as pd
+from dotenv import load_dotenv
+
+
+def create_csv_file(datafile):
     """
-    Create an empty CSV file with the specified number of rows.
+    Create a CSV file with columns for all unique positions found in the dataset.
     """
     # Calculate the total number of rows
     total_premier = criteria["premier_league"]
@@ -73,16 +81,21 @@ def create_csv_file():
     # Combine all row names
     all_names = top_names + middle_names + bottom_names
 
+    # Identify unique positions in the dataset
+    position_counts = datafile["Position"].value_counts()
+    unique_positions = position_counts.index.tolist()
+
+    # Ensure columns for all unique positions
+    columns_dict = {
+        position: pd.Series([None] * len(all_names), dtype="object")
+        for position in unique_positions
+    }
+
     # Create an empty DataFrame with the specified number of rows and correct dtypes
-    draft_data = pd.DataFrame(
-        {
-            "Name": all_names,
-            "GK": pd.Series([None] * len(all_names), dtype="object"),
-            "CB": pd.Series([None] * len(all_names), dtype="object"),
-            "CAM": pd.Series([None] * len(all_names), dtype="object"),
-            "ST": pd.Series([None] * len(all_names), dtype="object"),
-        }
-    )
+    draft_data = pd.DataFrame(columns_dict)
+
+    # Insert the 'Name' column as the first column
+    draft_data.insert(0, "Name", pd.Series(all_names, dtype="object"))
 
     # Get path from environment variable
     leagues_path = os.getenv("LEAGUES_PATH")
