@@ -53,15 +53,6 @@ def create_player_draft():
         draft_player_position(position_data, criteria, position)
 
 
-def get_unique_positions(datafile):
-    """
-    Get unique positions from the dataset and return them as a list.
-    """
-    position_counts = datafile["Position"].value_counts()
-    unique_positions = position_counts.index.tolist()
-    return unique_positions
-
-
 def create_csv_file(unique_positions):
     """
     Create a CSV file with columns for all unique positions found in the dataset.
@@ -136,6 +127,37 @@ def get_file_path():
 
     # Return file path
     return file_path
+
+
+def get_unique_positions(datafile):
+    """
+    Get unique positions from the dataset and return them as a list.
+    """
+    # Define the desired order of positions
+    desired_order = [
+        "GK",
+        "LWB",
+        "LB",
+        "CB",
+        "RB",
+        "RWB",
+        "CDM",
+        "CM",
+        "LM",
+        "CAM",
+        "RM",
+        "LW",
+        "CF",
+        "ST",
+        "RW",
+    ]
+    # Identify unique positions in the dataset
+    unique_positions = datafile["Position"].unique()
+
+    # Filter unique positions based on the desired order and keep the specified order
+    ordered_positions = [pos for pos in desired_order if pos in unique_positions]
+
+    return ordered_positions
 
 
 def print_banner_draft():
