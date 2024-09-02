@@ -42,8 +42,10 @@ def create_player_draft():
     # Load the dataset
     datafile = pd.read_csv(get_file_path())
 
+    unique_positions = get_unique_positions(datafile)
+
     # Create Empty CSV file and get unique positions
-    unique_positions = create_csv_file(datafile)
+    create_csv_file(unique_positions)
 
     # Filter data by position and update the CSV
     for position in unique_positions:
@@ -51,7 +53,16 @@ def create_player_draft():
         draft_player_position(position_data, criteria, position)
 
 
-def create_csv_file(datafile):
+def get_unique_positions(datafile):
+    """
+    Get unique positions from the dataset and return them as a list.
+    """
+    position_counts = datafile["Position"].value_counts()
+    unique_positions = position_counts.index.tolist()
+    return unique_positions
+
+
+def create_csv_file(unique_positions):
     """
     Create a CSV file with columns for all unique positions found in the dataset.
     """
@@ -67,10 +78,6 @@ def create_csv_file(datafile):
 
     # Combine all row names
     all_names = top_names + middle_names + bottom_names
-
-    # Identify unique positions in the dataset
-    position_counts = datafile["Position"].value_counts()
-    unique_positions = position_counts.index.tolist()
 
     # Ensure columns for all unique positions
     columns_dict = {
