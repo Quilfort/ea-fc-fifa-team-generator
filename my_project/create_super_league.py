@@ -49,6 +49,10 @@ def create_player_draft():
 
     # Filter data by position and update the CSV
     for position in unique_positions:
+        # Skip "CB1" and "CB2"
+        if position in ["CB1", "CB2"]:
+            continue
+
         position_data = datafile[datafile["Position"] == position]
         draft_player_position(position_data, criteria, position)
 
@@ -132,6 +136,7 @@ def get_file_path():
 def get_unique_positions(datafile):
     """
     Get unique positions from the dataset and return them as a list.
+    If "CB" is present, replace it with "CB1" and "CB2".
     """
     # Define the desired order of positions
     desired_order = [
@@ -156,6 +161,12 @@ def get_unique_positions(datafile):
 
     # Filter unique positions based on the desired order and keep the specified order
     ordered_positions = [pos for pos in desired_order if pos in unique_positions]
+
+    # Check if "CB" is in the list and replace it with "CB1" and "CB2"
+    if "CB" in ordered_positions:
+        # Find the index of "CB" and replace it with "CB1" and "CB2"
+        index = ordered_positions.index("CB")
+        ordered_positions[index : index + 1] = ["CB1", "CB2"]
 
     return ordered_positions
 

@@ -75,13 +75,14 @@ def draft_player_position(player_pos_data, criteria, position_column):
 
     draft_data.to_csv(output_file_path, index=False)
 
-    draft_middle_low_keepers(other_player_pos, criteria, extra_number, position_column)
+    draft_middle_low_leagues(other_player_pos, criteria, extra_number, position_column)
     # print(f"Super draft CSV file updated at: {output_file_path}\n")
 
 
-def draft_middle_low_keepers(other_player_pos, criteria, extra_number, position_column):
+def draft_middle_low_leagues(other_player_pos, criteria, extra_number, position_column):
     """
-    Draft middle and bottom league player_positions based on their ratings and fill all remaining slots in the CSV file.
+    Draft middle and bottom league player_positions based on their ratings
+     and fill all remaining slots in the CSV file.
     """
 
     total_needed_player_pos = criteria["middle_league"] + criteria["bottom_league"]
