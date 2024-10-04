@@ -56,6 +56,11 @@ def create_player_draft():
         position_data = datafile[datafile["Position"] == position]
         draft_player_position(position_data, criteria, position)
 
+    # Filter data by "CB" and update the CSV
+    position_data = datafile[datafile["Position"] == "CB"]
+    for cb_position in ["CB1", "CB2"]:
+        draft_player_position(position_data, criteria, cb_position)
+
 
 def create_csv_file(unique_positions):
     """
