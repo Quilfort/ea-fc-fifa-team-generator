@@ -76,7 +76,7 @@ def draft_player_position(player_pos_data, criteria, position_column):
     draft_data.to_csv(output_file_path, index=False)
 
     draft_middle_low_keepers(other_player_pos, criteria, extra_number, position_column)
-    print(f"Super draft CSV file updated at: {output_file_path}\n")
+    # print(f"Super draft CSV file updated at: {output_file_path}\n")
 
 
 def draft_middle_low_keepers(other_player_pos, criteria, extra_number, position_column):
@@ -151,6 +151,6 @@ def draft_middle_low_keepers(other_player_pos, criteria, extra_number, position_
     draft_data = remove_duplicates(draft_data)
 
     draft_data.to_csv(output_file_path, index=False)
-    print(
-        f"Super draft CSV file updated for middle and bottom leagues at: {output_file_path}\n"
-    )
+    # print(
+    #     f"Super draft CSV file updated for middle and bottom leagues at: {output_file_path}\n"
+    # )

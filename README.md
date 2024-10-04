@@ -21,6 +21,12 @@ For Mac
 make setup
 ```
 
+## Run Project
+
+```sh
+python main.py
+```
+
 ## Dataset
 
 ### Original Dataset
