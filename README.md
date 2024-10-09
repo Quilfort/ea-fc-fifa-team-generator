@@ -2,7 +2,9 @@
 
 ## About
 
-Project is based for the English Leagues
+Hey there! I kicked off this project after diving into career mode with AZ Alkmaar in EA FC24 and being less than impressed with the player faces in the Eredivisie. So, I decided to shake things up by randomizing all the players across the three different leagues in English football. It’s not just about making things look better; I’m using this as a chance to get a grip on Python, random algorithms, and AI tools. It’s been a fun journey, and I’m excited to see where it goes!
+
+his project is still a work in progress, and I’m looking forward to adding settings, drafting women players, and even incorporating EA FC25 and a drafting game in the future. It’s been a fun journey, and I can’t wait to see where it goes! Let me know if you need any more adjustments!
 
 ## Install Project
 
