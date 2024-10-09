@@ -7,6 +7,8 @@ import os
 from dotenv import load_dotenv
 import pandas as pd
 from .create_players import draft_player_position
+from .create_players import draft_top_cbs
+from .create_players import draft_middle_bottom_cbs
 
 # Configuration dictionary for criteria
 criteria = {
@@ -50,16 +52,17 @@ def create_player_draft():
     # Filter data by position and update the CSV
     for position in unique_positions:
         # Skip "CB1" and "CB2"
-        if position in ["CB1", "CB2"]:
+        if position in ["CB", "CB1", "CB2"]:
             continue
 
         position_data = datafile[datafile["Position"] == position]
         draft_player_position(position_data, criteria, position)
 
-    # Filter data by "CB" and update the CSV
-    position_data = datafile[datafile["Position"] == "CB"]
-    for cb_position in ["CB1", "CB2"]:
-        draft_player_position(position_data, criteria, cb_position)
+    # For CB positions
+    cb_data = datafile[datafile["Position"] == "CB"]
+    extra_number = 10
+    remaining_cbs = draft_top_cbs(cb_data, criteria, extra_number)
+    draft_middle_bottom_cbs(remaining_cbs, criteria, extra_number)
 
 
 def create_csv_file(unique_positions):

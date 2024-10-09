@@ -155,3 +155,104 @@ def draft_middle_low_leagues(other_player_pos, criteria, extra_number, position_
     # print(
     #     f"Super draft CSV file updated for middle and bottom leagues at: {output_file_path}\n"
     # )
+
+
+def draft_top_cbs(datafile, criteria, extra_number):
+    """
+    Draft player_positions for multiple based on the top ratings and save to a CSV file.
+    """
+
+    # Filter data for CB position
+    cb_data = datafile[datafile["Position"] == "CB"]
+
+    # Sort CBs by Overall rating
+    cb_sorted = cb_data.sort_values(by="Overall", ascending=False)
+
+    # Select top CBs (double the amount for premier league plus extra)
+    number_of_top_cbs = (criteria["premier_league"] * 2) + extra_number
+    top_cbs = cb_sorted.head(number_of_top_cbs)
+
+    # Shuffle the top CBs
+    top_cbs = top_cbs.sample(frac=1).reset_index(drop=True)
+
+    # Split top CBs for CB1 and CB2
+    cb1_top = top_cbs.iloc[: len(top_cbs) // 2]
+    cb2_top = top_cbs.iloc[len(top_cbs) // 2 :]
+
+    # Convert to string format
+    cb1_top_str = cb1_top.apply(lambda row: ", ".join(map(str, row)), axis=1)
+    cb2_top_str = cb2_top.apply(lambda row: ", ".join(map(str, row)), axis=1)
+
+    # Read the existing draft data
+    leagues_path = os.getenv("LEAGUES_PATH")
+    output_file_path = os.path.join(leagues_path, "super_draft.csv")
+    draft_data = pd.read_csv(output_file_path)
+
+    # Ensure CB1 and CB2 columns are of type object (string)
+    draft_data["CB1"] = draft_data["CB1"].astype("object")
+    draft_data["CB2"] = draft_data["CB2"].astype("object")
+
+    # Update CB1 and CB2 columns for premier league
+    draft_data.loc[: criteria["premier_league"] - 1, "CB1"] = cb1_top_str.values[
+        : criteria["premier_league"]
+    ]
+    draft_data.loc[: criteria["premier_league"] - 1, "CB2"] = cb2_top_str.values[
+        : criteria["premier_league"]
+    ]
+
+    # Save the updated draft data
+    draft_data.to_csv(output_file_path, index=False)
+
+    return cb_sorted.iloc[number_of_top_cbs:]
+
+
+def draft_middle_bottom_cbs(remaining_cbs, criteria, extra_number):
+    """
+    Draft middle and bottom league player_positions for multple positions based on their ratings
+     and fill all remaining slots in the CSV file.
+    """
+    # Calculate the number of CBs needed for middle and bottom leagues
+    total_needed_cbs = (criteria["middle_league"] + criteria["bottom_league"]) * 2
+
+    # Select and shuffle the needed CBs
+    needed_cbs = remaining_cbs.head(total_needed_cbs + extra_number)
+    needed_cbs = needed_cbs.sample(frac=1).reset_index(drop=True)
+
+    # Split CBs for middle and bottom leagues
+    middle_cbs = needed_cbs.head(criteria["middle_league"] * 2)
+    bottom_cbs = needed_cbs.iloc[len(middle_cbs) : total_needed_cbs]
+
+    # Further split for CB1 and CB2
+    cb1_middle = middle_cbs.iloc[::2]
+    cb2_middle = middle_cbs.iloc[1::2]
+    cb1_bottom = bottom_cbs.iloc[::2]
+    cb2_bottom = bottom_cbs.iloc[1::2]
+
+    # Convert to string format
+    cb1_middle_str = cb1_middle.apply(lambda row: ", ".join(map(str, row)), axis=1)
+    cb2_middle_str = cb2_middle.apply(lambda row: ", ".join(map(str, row)), axis=1)
+    cb1_bottom_str = cb1_bottom.apply(lambda row: ", ".join(map(str, row)), axis=1)
+    cb2_bottom_str = cb2_bottom.apply(lambda row: ", ".join(map(str, row)), axis=1)
+
+    # Read the existing draft data
+    leagues_path = os.getenv("LEAGUES_PATH")
+    output_file_path = os.path.join(leagues_path, "super_draft.csv")
+    draft_data = pd.read_csv(output_file_path)
+
+    # Ensure CB1 and CB2 columns are of type object (string)
+    draft_data["CB1"] = draft_data["CB1"].astype("object")
+    draft_data["CB2"] = draft_data["CB2"].astype("object")
+
+    # Update CB1 and CB2 columns for middle and bottom leagues
+    middle_start = criteria["premier_league"]
+    middle_end = middle_start + criteria["middle_league"]
+    bottom_start = middle_end
+    bottom_end = bottom_start + criteria["bottom_league"]
+
+    draft_data.loc[middle_start : middle_end - 1, "CB1"] = cb1_middle_str.values
+    draft_data.loc[middle_start : middle_end - 1, "CB2"] = cb2_middle_str.values
+    draft_data.loc[bottom_start : bottom_end - 1, "CB1"] = cb1_bottom_str.values
+    draft_data.loc[bottom_start : bottom_end - 1, "CB2"] = cb2_bottom_str.values
+
+    # Save the updated draft data
+    draft_data.to_csv(output_file_path, index=False)
